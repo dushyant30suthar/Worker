@@ -15,7 +15,6 @@ public class ThreadManager {
      * methods to dispatch tasks on demanded thread.*/
 
     private ThreadManager() {
-        this.networkOperationThread = Executors.newSingleThreadExecutor();
         this.mainThread = new MainThreadExecutor();
     }
 
@@ -26,7 +25,10 @@ public class ThreadManager {
         return threadManager;
     }
 
-    public Executor getNetworkOperationThread() {
+    public Executor getNetworkOperationThread(boolean shouldCreateNewThread) {
+        if (shouldCreateNewThread) {
+            this.networkOperationThread = Executors.newSingleThreadExecutor();
+        }
         return networkOperationThread;
     }
 

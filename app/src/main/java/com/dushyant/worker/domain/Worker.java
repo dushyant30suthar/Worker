@@ -6,6 +6,8 @@ import android.util.Log;
 import com.dushyant.worker.client.foregroundcomponents.imageComponent.Task;
 import com.dushyant.worker.framework.utils.ThreadManager;
 
+import java.util.concurrent.Executor;
+
 /*
  * We control our data flow here. We decide from where data should be fetched depending upon certain conditions.*/
 
@@ -15,8 +17,10 @@ public class Worker<ResultType> {
 
     private ThreadManager threadManager = ThreadManager.getInstance();
 
-    public Worker(String workerName) {
+    private Executor networkOperationThread;
 
+    public Worker(String workerName) {
+        networkOperationThread = threadManager.getNetworkOperationThread(true);
         TAG = workerName;
         Log.i(TAG, "worker initialized");
     }
@@ -45,6 +49,6 @@ public class Worker<ResultType> {
     }
 
     public void addTask(String taskName, Task<ResultType> task) {
-        threadManager.getNetworkOperationThread().execute(() -> doWork(taskName, task));
+        networkOperationThread.execute(() -> doWork(taskName, task));
     }
 }
