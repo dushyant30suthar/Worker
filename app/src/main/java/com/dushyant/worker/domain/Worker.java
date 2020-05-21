@@ -4,61 +4,47 @@ package com.dushyant.worker.domain;
 import android.util.Log;
 
 import com.dushyant.worker.client.foregroundcomponents.imageComponent.Task;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import com.dushyant.worker.framework.utils.ThreadManager;
 
 /*
  * We control our data flow here. We decide from where data should be fetched depending upon certain conditions.*/
 
-public class Worker<ResultType> extends Observable<Task<ResultType>> {
+public class Worker<ResultType> {
 
+    private String TAG;
 
-    private String TAG = "Worker";
+    private ThreadManager threadManager = ThreadManager.getInstance();
 
-    private Observer<? super Task<ResultType>> requestObserver;
+    public Worker(String workerName) {
 
-    /*
-     * Here is the flow implemented. This series of statements decide the final data returned to ui.*/
-    @Override
-    protected void subscribeActual(Observer<? super Task<ResultType>> observer) {
-
-        Log.i(TAG, "worker started");
-
-        requestObserver = observer;
-
-        //requestObserver.onComplete();
+        TAG = workerName;
+        Log.i(TAG, "worker initialized");
     }
 
-    private void doWork(Task<ResultType> task) {
-
-        Log.i(TAG, "worker executing " + task.getTaskName());
+    synchronized private void doWork(String taskName, Task<ResultType> task) {
+        Log.i(TAG, "worker executing " + taskName);
 
         ResultType dataFromNetwork = task.onExecuteTask();
 
         if (dataFromNetwork != null) {
 
-            Log.d(TAG, "Request Success ");
+            Log.d(TAG, "Request Success " + taskName);
 
-            requestObserver.onNext(task);
+            threadManager.getMainThread().execute(() -> task.onTaskComplete(dataFromNetwork));
 
         } else {
 
-            Log.e(TAG, "Request Failure ");
+            Log.e(TAG, "Request Failure " + taskName);
 
-            onFetchFailed(new Throwable("No Data Received"));
+            //onFetchFailed(new Throwable("No Data Received"));
 
         }
 
-        Log.i(TAG, "worker completed task");
+        Log.i(TAG, "worker completed task " + taskName);
 
     }
 
-    public void addTask(Task<ResultType> task) {
-        doWork(task);
-    }
-
-    private void onFetchFailed(Throwable throwable) {
-        requestObserver.onError(throwable);
+    public void addTask(String taskName, Task<ResultType> task) {
+        threadManager.getNetworkOperationThread().execute(() -> doWork(taskName, task));
     }
 }

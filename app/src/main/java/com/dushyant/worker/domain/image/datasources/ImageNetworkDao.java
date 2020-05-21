@@ -1,4 +1,4 @@
-package com.dushyant.worker.domain.galaxy.datasources;
+package com.dushyant.worker.domain.image.datasources;
 
 
 import okhttp3.ResponseBody;

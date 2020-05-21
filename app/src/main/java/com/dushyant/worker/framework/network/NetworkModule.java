@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.dushyant.worker.BuildConfig;
-import com.dushyant.worker.domain.galaxy.datasources.ImageNetworkDao;
+import com.dushyant.worker.domain.image.datasources.ImageNetworkDao;
 
 import java.util.concurrent.TimeUnit;
 

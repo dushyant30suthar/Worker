@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.dushyant.worker.domain.galaxy.datasources.ImageNetworkDao;
+import com.dushyant.worker.domain.image.datasources.ImageNetworkDao;
 import com.dushyant.worker.framework.application.WorkerApplication;
 import com.dushyant.worker.framework.utils.ThreadManager;
 

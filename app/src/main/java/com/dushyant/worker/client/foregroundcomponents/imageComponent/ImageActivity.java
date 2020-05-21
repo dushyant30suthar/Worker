@@ -13,14 +13,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.dushyant.worker.R;
 import com.dushyant.worker.client.foregroundcomponents.base.WayFindingConfiguration;
-import com.dushyant.worker.domain.DomainRequestObserver;
 import com.dushyant.worker.domain.Worker;
 import com.dushyant.worker.framework.network.NetworkModule;
 import com.dushyant.worker.framework.utils.ThreadManager;
 
 import java.io.IOException;
 
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -34,17 +32,10 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
 
     private ImageView imageView1, imageView2;
     private Button button1, button2;
-    Worker<Bitmap> worker1 = new Worker<>();
-    Worker<Bitmap> worker2 = new Worker<>();
+    Worker<Bitmap> worker1 = new Worker<>("Worker 1");
+    Worker<Bitmap> worker2 = new Worker<>("Worker 2");
     private ThreadManager threadManager = ThreadManager.getInstance();
     private Task<Bitmap> task1 = new Task<Bitmap>() {
-        private String taskName;
-        private Bitmap result;
-
-        @Override
-        public Bitmap getResult() {
-            return result;
-        }
 
         @Override
         public Bitmap onExecuteTask() {
@@ -56,9 +47,7 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
 
                     Log.d(TAG, "Request Success " + response.toString());
 
-                    result = BitmapFactory.decodeStream(response.body().byteStream());
-
-                    return result;
+                    return BitmapFactory.decodeStream(response.body().byteStream());
 
                 }
             } catch (IOException e) {
@@ -71,25 +60,8 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
         public void onTaskComplete(Bitmap result) {
             imageView1.setImageBitmap(result);
         }
-
-        @Override
-        public String getTaskName() {
-            return taskName;
-        }
-
-        @Override
-        public void setTaskName(String taskName) {
-            this.taskName = taskName;
-        }
     };
     private Task<Bitmap> task2 = new Task<Bitmap>() {
-        private String taskName;
-        private Bitmap result;
-
-        @Override
-        public Bitmap getResult() {
-            return result;
-        }
 
         @Override
         public Bitmap onExecuteTask() {
@@ -101,9 +73,7 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
 
                     Log.d(TAG, "Request Success " + response.toString());
 
-                    result = BitmapFactory.decodeStream(response.body().byteStream());
-
-                    return result;
+                    return BitmapFactory.decodeStream(response.body().byteStream());
 
                 }
             } catch (IOException e) {
@@ -117,15 +87,6 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
             imageView2.setImageBitmap(result);
         }
 
-        @Override
-        public String getTaskName() {
-            return taskName;
-        }
-
-        @Override
-        public void setTaskName(String taskName) {
-            this.taskName = taskName;
-        }
     };
     private int task1Count = 0;
     private int task2Count = 0;
@@ -146,12 +107,6 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
         button2 = findViewById(R.id.button2);
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
-        worker1.subscribeOn(Schedulers.from(threadManager.getNetworkOperationThread()))
-                .observeOn(Schedulers.from(threadManager.getMainThread()))
-                .subscribe(new DomainRequestObserver<>());
-        worker2.subscribeOn(Schedulers.from(threadManager.getNetworkOperationThread()))
-                .observeOn(Schedulers.from(threadManager.getMainThread()))
-                .subscribe(new DomainRequestObserver<>());
     }
 
     @Override
@@ -164,14 +119,12 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
         switch (v.getId()) {
             case R.id.button1: {
                 task1Count++;
-                task1.setTaskName("task " + task1Count);
-                worker1.addTask(task1);
+                worker1.addTask("task " + task1Count, task1);
             }
             break;
             case R.id.button2: {
                 task2Count++;
-                task2.setTaskName("task " + task2Count);
-                worker2.addTask(task2);
+                worker2.addTask("task " + task2Count, task2);
             }
             break;
         }
