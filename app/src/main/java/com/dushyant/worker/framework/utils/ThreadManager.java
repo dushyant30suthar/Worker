@@ -6,10 +6,6 @@ import android.os.Looper;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import dagger.Module;
-import dagger.Provides;
-
-@Module
 public class ThreadManager {
     private static ThreadManager threadManager;
     private Executor networkOperationThread;
@@ -23,7 +19,6 @@ public class ThreadManager {
         this.mainThread = new MainThreadExecutor();
     }
 
-    @Provides
     public static ThreadManager getInstance() {
         if (threadManager == null) {
             threadManager = new ThreadManager();

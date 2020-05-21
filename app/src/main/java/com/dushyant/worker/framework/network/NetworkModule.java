@@ -9,8 +9,6 @@ import com.dushyant.worker.domain.image.datasources.ImageNetworkDao;
 
 import java.util.concurrent.TimeUnit;
 
-import dagger.Module;
-import dagger.Provides;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /*
  * Module responsible for network operations in entire app.
  * It just provides retrofitClient of particular DAO to perform request. */
-@Module
+
 public class NetworkModule {
 
     private Context applicationContext;
@@ -41,7 +39,6 @@ public class NetworkModule {
 
     /*
      * Dao provided by Dagger to repositories to make use of to perform dao requests on network.*/
-    @Provides
     public ImageNetworkDao getImageNetworkDao() {
         return getImageNetworkDao(networkConfiguration.getRetrofitClient());
     }
