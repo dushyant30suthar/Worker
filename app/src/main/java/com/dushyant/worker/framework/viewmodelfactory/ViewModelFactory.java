@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.dushyant.worker.client.foregroundcomponents.imageComponent.ImageViewModel;
-import com.dushyant.worker.domain.galaxy.WorkManager;
 import com.dushyant.worker.domain.galaxy.datasources.ImageNetworkDao;
 import com.dushyant.worker.framework.application.WorkerApplication;
 import com.dushyant.worker.framework.utils.ThreadManager;
@@ -19,8 +17,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     ImageNetworkDao imageNetworkDao;
     @Inject
     ThreadManager threadManager;
-
-    private WorkManager workManager;
 
 
     /*
@@ -45,10 +41,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         /*
          * Here we can create various view Models.*/
 
-        if (modelClass.isAssignableFrom(ImageViewModel.class)) {
-            return (T) new ImageViewModel(workManager);
-        } else {
-            throw new IllegalArgumentException("Unknown class name");
-        }
+        return null;
     }
 }

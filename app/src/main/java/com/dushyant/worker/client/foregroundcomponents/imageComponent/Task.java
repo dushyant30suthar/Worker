@@ -6,7 +6,9 @@ public interface Task<T> {
 
     void onTaskComplete(T result);
 
-    String getWorkerName();
+    String getTaskName();
 
-    void setWorkerName(String workerName);
+    void setTaskName(String taskName);
+
+    T getResult();
 }

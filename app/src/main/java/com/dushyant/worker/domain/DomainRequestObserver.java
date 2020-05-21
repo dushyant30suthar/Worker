@@ -9,13 +9,7 @@ import io.reactivex.disposables.Disposable;
  * Generic observer observing DomainRequestObservable and delivers response from RxObservable to LiveData
  * which is being observed by ui.*/
 
-public class DomainRequestObserver<ResultType> implements Observer<DomainRequest<ResultType>> {
-
-    private Task<ResultType> task;
-
-    public DomainRequestObserver(Task<ResultType> task) {
-        this.task = task;
-    }
+public class DomainRequestObserver<ResultType> implements Observer<Task<ResultType>> {
 
     @Override
     public void onSubscribe(Disposable d) {
@@ -23,8 +17,8 @@ public class DomainRequestObserver<ResultType> implements Observer<DomainRequest
     }
 
     @Override
-    public void onNext(DomainRequest<ResultType> baseResponseDataRequest) {
-        task.onTaskComplete(baseResponseDataRequest.getData());
+    public void onNext(Task<ResultType> task) {
+        task.onTaskComplete(task.getResult());
     }
 
     @Override
@@ -45,10 +39,6 @@ public class DomainRequestObserver<ResultType> implements Observer<DomainRequest
 
             //task.onTaskError(DomainRequest.failed(domainRequestError, null));
         }
-    }
-
-    public Task<ResultType> getTask() {
-        return task;
     }
 
     @Override

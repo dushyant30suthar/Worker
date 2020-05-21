@@ -11,40 +11,28 @@ import io.reactivex.Observer;
 /*
  * We control our data flow here. We decide from where data should be fetched depending upon certain conditions.*/
 
-public class Worker<ResultType> extends Observable<DomainRequest<ResultType>> {
+public class Worker<ResultType> extends Observable<Task<ResultType>> {
 
 
     private String TAG = "Worker";
 
-    private Observer<? super DomainRequest<ResultType>> requestObserver;
-
-    private Task<ResultType> task;
-
-    public Worker(Task<ResultType> task) {
-        TAG = task.getWorkerName();
-        this.task = task;
-    }
+    private Observer<? super Task<ResultType>> requestObserver;
 
     /*
      * Here is the flow implemented. This series of statements decide the final data returned to ui.*/
     @Override
-    protected void subscribeActual(Observer<? super DomainRequest<ResultType>> observer) {
+    protected void subscribeActual(Observer<? super Task<ResultType>> observer) {
 
         Log.i(TAG, "worker started");
 
         requestObserver = observer;
 
-        fetchFromNetwork();
-
-        requestObserver.onComplete();
-
-        Log.i(TAG, "worker completed task");
+        //requestObserver.onComplete();
     }
 
+    private void doWork(Task<ResultType> task) {
 
-    private void fetchFromNetwork() {
-
-        Log.i(TAG, "worker executing task on background");
+        Log.i(TAG, "worker executing " + task.getTaskName());
 
         ResultType dataFromNetwork = task.onExecuteTask();
 
@@ -52,7 +40,7 @@ public class Worker<ResultType> extends Observable<DomainRequest<ResultType>> {
 
             Log.d(TAG, "Request Success ");
 
-            requestObserver.onNext(DomainRequest.succeed(dataFromNetwork, 200));
+            requestObserver.onNext(task);
 
         } else {
 
@@ -62,6 +50,12 @@ public class Worker<ResultType> extends Observable<DomainRequest<ResultType>> {
 
         }
 
+        Log.i(TAG, "worker completed task");
+
+    }
+
+    public void addTask(Task<ResultType> task) {
+        doWork(task);
     }
 
     private void onFetchFailed(Throwable throwable) {
