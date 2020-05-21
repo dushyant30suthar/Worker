@@ -32,8 +32,8 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
 
     private ImageView imageView1, imageView2;
     private Button button1, button2;
-    Worker<Bitmap> worker1 = new Worker<>("Worker 1");
-    Worker<Bitmap> worker2 = new Worker<>("Worker 2");
+    Worker<Bitmap> worker1 = new Worker<>("Worker1");
+    Worker<Bitmap> worker2 = new Worker<>("Worker2");
     private ThreadManager threadManager = ThreadManager.getInstance();
     private Task<Bitmap> task1 = new Task<Bitmap>() {
 
