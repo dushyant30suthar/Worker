@@ -1,0 +1,13 @@
+package com.dushyant.worker.client.foregroundcomponents.base;
+
+import androidx.lifecycle.LifecycleOwner;
+
+/*
+ * These methods are needed for every fragment. Other common methods will be signatured here.*/
+public interface BaseViewController {
+
+    void showError(String message);
+
+    LifecycleOwner getLifeCycleOwner();
+
+}
