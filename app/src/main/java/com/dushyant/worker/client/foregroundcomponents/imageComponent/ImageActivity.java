@@ -9,10 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.dushyant.worker.R;
-import com.dushyant.worker.client.foregroundcomponents.base.WayFindingConfiguration;
 import com.dushyant.worker.domain.Worker;
 import com.dushyant.worker.framework.network.NetworkModule;
 import com.dushyant.worker.framework.utils.ThreadManager;
@@ -22,7 +20,7 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ImageActivity extends AppCompatActivity implements WayFindingConfiguration, View.OnClickListener {
+public class ImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ImageActivity";
     /*
@@ -107,11 +105,6 @@ public class ImageActivity extends AppCompatActivity implements WayFindingConfig
         button2 = findViewById(R.id.button2);
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
-    }
-
-    @Override
-    public Toolbar getToolbar() {
-        return null;
     }
 
     @Override
