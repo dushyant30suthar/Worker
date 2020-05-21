@@ -25,7 +25,7 @@ public class Worker<ResultType> {
         Log.i(TAG, "worker initialized");
     }
 
-    synchronized private void doWork(String taskName, Task<ResultType> task) {
+    private void doWork(String taskName, Task<ResultType> task) {
         Log.i(TAG, "worker executing " + taskName);
 
         ResultType dataFromNetwork = task.onExecuteTask();
